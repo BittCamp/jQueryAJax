@@ -1,0 +1,64 @@
+<!DOCTYPE html><!-- [ 김찬영  2023-08-28 오후 05:59:28 ] -->
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../css/common.css"> 
+<link rel="stylesheet" href="../css/reset.css"> 
+</head>
+<body>
+<h1 class="title">$.ajax() 함수를 사용한 XML 데이터 읽기 (2)</h1>
+<div class="exec">
+	<input type="button" value="XML 데이터 가져오기" id="mybtn" />
+</div>
+<div class="console" id="result"></div>
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script>
+$(function(){
+	$('#mybtn').click(function(){
+		$.ajax({
+			type: 'get',
+			url: '../xml/xml02.xml',
+			dataType: 'xml', //서버로부터 받는 타입.
+			success: function(data){
+				var subject = $(data).find('subject'); // 똑같은 서브젝트 세개라 배열로 꺼내온다.
+				
+				subject.each(function(){ //3번반복 // each하면 자기가 알아서 for문으로 반복문돌아간다.
+					var title = $(this).find('title').text();//subject써도 되나 대신에 this로 쓸수있지.
+					var time = $(this).find('time').text();//subject써도 되나 대신에 this로 쓸수있지.
+					var teacher = $(this).find('teacher').text();//subject써도 되나 대신에 this로 쓸수있지.
+					
+					/* 	
+				 	var div = $('<div/>'); //<div></div>태그 만들라는 명령어
+				 	var p1 = $('<p/>').html(title); //<p>Javascript + jQuery+Ajax</p>
+				 	var p2 = $('<p/>').html(time); 
+				 	var p3 = $('<p/>').html(teacher);
+				 	
+				 	div.append(p1).append(p2).append(p3); //메소드 체인
+				 	
+				 	//$('#result').append(div).append('<hr/>'); 밑에처럼 두개 나눠써도 된다. 근데 옆으로 붙여쓰는게 가독성이 좋으네~
+				 	//append는 맨끝에 가서 붙여라 라는 뜻이다.
+				 	$('#result').append(div)
+				 	$('#result').append('<hr/>');
+				 	*/
+				 	
+				 	var div = `<div>`; //  `백틱. 싱글따옴표가 아님. append하고 가독성이 안좋아서 이렇게도 많이씀. 어팬드써도되고 백틱해서써도된다.
+				 	div += `<p>` + title+ `</p>`; //`<p>title</p>` 이렇게 쓰면 title이라는 글자만 출력됨,.
+				 	div += `<p>` + time+ `</p>`;
+				 	div += `<p>` + teacher+ `</p>`;
+				 	div += `</div>`;
+				 		
+				 	$('#result').append(div);
+				 	$('#result').append('<hr/>');
+				});//each
+			},
+			error: function(err){
+				console.log(err);
+			}
+		});
+	});
+});
+</script>
+</body>
+</html>
