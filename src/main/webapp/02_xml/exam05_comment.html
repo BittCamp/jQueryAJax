@@ -118,8 +118,8 @@ function getToday(){
 	if(mi < 10) mi = '0' + mi;
 	if(ss < 10) ss = '0' + ss;
 	
-	//var today = `${yy}-${mm}-${dd} ${hh}:${mi}:${ss}`;
-	var today = yy+"-"+mm+"-"+dd+" "+hh+":"+mi+":"+ss;	
+	var today = `${yy}-${mm}-${dd} ${hh}:${mi}:${ss}`;
+	//var today = yy+"-"+mm+"-"+dd+" "+hh+":"+mi+":"+ss;	
 	return today;
 }
 
@@ -221,8 +221,35 @@ $(function(){
 				  alert('덧글 작성하는데 실패하였습니다. 잠시후에 다시 시도하세요.');
 			  });
 		
-		return false;
+		return false; // 다른화면으로 못넘기게 return false
 	});
+	
+	//삭제하기 - 동적처리
+	//부모로 접근
+	//$(document).on('click','버튼',function(){})
+	$(document).on('click','.delete_btn',function(){
+		if(confirm("삭제하시겠습니까?")){
+			var num = $(this).parents('li').attr('data-num');//.parent().parent(); //글번호 얻어오기
+			var target = $(this).parents('.comment_item');
+			
+			$.post('../comment/comment_delete.jsp', //$.post('',{},function(data){}); 기본형
+					{},
+					function(data){
+						var result = eval($(data).find('result').text());
+						
+						if(result){
+							alert($(data).find('message').text());
+							target.remove();
+						}//if
+					}
+				).fail(function(){
+					  alert('덧글 삭제하는데 실패하였습니다. 잠시후에 다시 시도하세요.');
+				});	
+		
+		}
+	});
+	
+});
 </script>
 </body>
 </html>
@@ -253,4 +280,4 @@ data-*
 
 - 데이터를 설정할 때,
     $(".user").data("name", "고길동");
- -->
+-- -->
